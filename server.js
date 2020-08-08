@@ -1,19 +1,22 @@
 const express = require("express");
 const app = express();
-
-// process.env.PORT is for if we want to place on Heroku later on
+const mongoose = require("mongoose");
 const PORT = process.env.PORT || 3000;
 
-// sets for sending and receiving json
+// sets up our app for json and url encoded data
 app.use(express.json());
-
-// sets up for string encoded data (params and req.quert) everything else
 app.use(express.urlencoded({ extended: true }));
 
-const apiRoutes = require("./Routes/test-routes.js");
-const notesRoutes = require("./Routes/mongo-routes.js");
+// creates connection to mongodb
+mongoose.connect("mongodb://localhost/shoe_db", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
+});
 
-app.use(apiRoutes, notesRoutes);
+// creates connection to mongodb
+const shoeRoutes = require("./Routes/shoe-routes");
+app.use(shoeRoutes);
 
-//  sets up port gets server running
 app.listen(PORT, () => console.log(`listening at http://localhost:${PORT}`));
